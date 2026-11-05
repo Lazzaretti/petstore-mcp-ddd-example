@@ -1,0 +1,562 @@
+{
+  "note": "Reduced for publication: from Claude Code's first model request, only the MCP tools and the MCP server instructions as they were sent. System prompt, user context and headers removed.",
+  "body": {
+    "model": "claude-haiku-5-5",
+    "tools": [
+      {
+        "name": "mcp__petstore__addPet",
+        "description": "Add a new pet to the store.",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64",
+              "example": 10
+            },
+            "name": {
+              "type": "string",
+              "example": "doggie"
+            },
+            "category": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "format": "int64",
+                  "example": 1
+                },
+                "name": {
+                  "type": "string",
+                  "example": "Dogs"
+                }
+              }
+            },
+            "photoUrls": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "format": "int64"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "status": {
+              "enum": [
+                "available",
+                "pending",
+                "sold"
+              ],
+              "type": "string",
+              "description": "pet status in the store"
+            }
+          },
+          "required": [
+            "name",
+            "photoUrls"
+          ]
+        }
+      },
+      {
+        "name": "mcp__petstore__createUser",
+        "description": "This can only be done by the logged in user.",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64",
+              "example": 10
+            },
+            "username": {
+              "type": "string",
+              "example": "theUser"
+            },
+            "firstName": {
+              "type": "string",
+              "example": "John"
+            },
+            "lastName": {
+              "type": "string",
+              "example": "James"
+            },
+            "email": {
+              "type": "string",
+              "example": "john@email.com"
+            },
+            "password": {
+              "type": "string",
+              "example": "12345"
+            },
+            "phone": {
+              "type": "string",
+              "example": "12345"
+            },
+            "userStatus": {
+              "type": "integer",
+              "description": "User Status",
+              "format": "int32",
+              "example": 1
+            }
+          },
+          "required": []
+        }
+      },
+      {
+        "name": "mcp__petstore__createUsersWithListInput",
+        "description": "Creates list of users with given input array.",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "body": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 10
+                  },
+                  "username": {
+                    "type": "string",
+                    "example": "theUser"
+                  },
+                  "firstName": {
+                    "type": "string",
+                    "example": "John"
+                  },
+                  "lastName": {
+                    "type": "string",
+                    "example": "James"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "john@email.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "12345"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "example": "12345"
+                  },
+                  "userStatus": {
+                    "type": "integer",
+                    "description": "User Status",
+                    "format": "int32",
+                    "example": 1
+                  }
+                }
+              }
+            }
+          },
+          "required": []
+        }
+      },
+      {
+        "name": "mcp__petstore__deleteOrder",
+        "description": "For valid response try integer IDs with value < 1000. Anything above 1000 or non-integers will generate API errors.",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "orderId": {
+              "type": "integer",
+              "format": "int64",
+              "description": "ID of the order that needs to be deleted"
+            }
+          },
+          "required": [
+            "orderId"
+          ]
+        }
+      },
+      {
+        "name": "mcp__petstore__deletePet",
+        "description": "Delete a pet.",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "api_key": {
+              "type": "string"
+            },
+            "petId": {
+              "type": "integer",
+              "format": "int64",
+              "description": "Pet id to delete"
+            }
+          },
+          "required": [
+            "petId"
+          ]
+        }
+      },
+      {
+        "name": "mcp__petstore__deleteUser",
+        "description": "This can only be done by the logged in user.",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "username": {
+              "type": "string",
+              "description": "The name that needs to be deleted"
+            }
+          },
+          "required": [
+            "username"
+          ]
+        }
+      },
+      {
+        "name": "mcp__petstore__findPetsByStatus",
+        "description": "Multiple status values can be provided with comma separated strings.",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "enum": [
+                "available",
+                "pending",
+                "sold"
+              ],
+              "type": "string",
+              "default": "available",
+              "description": "Status values that need to be considered for filter"
+            }
+          },
+          "required": [
+            "status"
+          ]
+        }
+      },
+      {
+        "name": "mcp__petstore__findPetsByTags",
+        "description": "Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Tags to filter by"
+            }
+          },
+          "required": [
+            "tags"
+          ]
+        }
+      },
+      {
+        "name": "mcp__petstore__getInventory",
+        "description": "Returns a map of status codes to quantities.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "required": []
+        }
+      },
+      {
+        "name": "mcp__petstore__getOrderById",
+        "description": "For valid response try integer IDs with value <= 5 or > 10. Other values will generate exceptions.",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "orderId": {
+              "type": "integer",
+              "format": "int64",
+              "description": "ID of order that needs to be fetched"
+            }
+          },
+          "required": [
+            "orderId"
+          ]
+        }
+      },
+      {
+        "name": "mcp__petstore__getPetById",
+        "description": "Returns a single pet.",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "petId": {
+              "type": "integer",
+              "format": "int64",
+              "description": "ID of pet to return"
+            }
+          },
+          "required": [
+            "petId"
+          ]
+        }
+      },
+      {
+        "name": "mcp__petstore__getUserByName",
+        "description": "Get user detail based on username.",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "username": {
+              "type": "string",
+              "description": "The name that needs to be fetched. Use user1 for testing"
+            }
+          },
+          "required": [
+            "username"
+          ]
+        }
+      },
+      {
+        "name": "mcp__petstore__loginUser",
+        "description": "Log into the system.",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "username": {
+              "type": "string",
+              "description": "The user name for login"
+            },
+            "password": {
+              "type": "string",
+              "description": "The password for login in clear text"
+            }
+          },
+          "required": []
+        }
+      },
+      {
+        "name": "mcp__petstore__logoutUser",
+        "description": "Log user out of the system.",
+        "input_schema": {
+          "type": "object",
+          "properties": {},
+          "required": []
+        }
+      },
+      {
+        "name": "mcp__petstore__placeOrder",
+        "description": "Place a new order in the store.",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64",
+              "example": 10
+            },
+            "petId": {
+              "type": "integer",
+              "format": "int64",
+              "example": 198772
+            },
+            "quantity": {
+              "type": "integer",
+              "format": "int32",
+              "example": 7
+            },
+            "shipDate": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "status": {
+              "enum": [
+                "placed",
+                "approved",
+                "delivered"
+              ],
+              "type": "string",
+              "description": "Order Status",
+              "example": "approved"
+            },
+            "complete": {
+              "type": "boolean"
+            }
+          },
+          "required": []
+        }
+      },
+      {
+        "name": "mcp__petstore__updatePet",
+        "description": "Update an existing pet by Id.",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64",
+              "example": 10
+            },
+            "name": {
+              "type": "string",
+              "example": "doggie"
+            },
+            "category": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "format": "int64",
+                  "example": 1
+                },
+                "name": {
+                  "type": "string",
+                  "example": "Dogs"
+                }
+              }
+            },
+            "photoUrls": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "format": "int64"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "status": {
+              "enum": [
+                "available",
+                "pending",
+                "sold"
+              ],
+              "type": "string",
+              "description": "pet status in the store"
+            }
+          },
+          "required": [
+            "name",
+            "photoUrls"
+          ]
+        }
+      },
+      {
+        "name": "mcp__petstore__updatePetWithForm",
+        "description": "Updates a pet resource based on the form data.",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "petId": {
+              "type": "integer",
+              "format": "int64",
+              "description": "ID of pet that needs to be updated"
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of pet that needs to be updated"
+            },
+            "status": {
+              "type": "string",
+              "description": "Status of pet that needs to be updated"
+            }
+          },
+          "required": [
+            "petId"
+          ]
+        }
+      },
+      {
+        "name": "mcp__petstore__updateUser",
+        "description": "This can only be done by the logged in user.",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "username__path": {
+              "type": "string",
+              "description": "name that need to be deleted (Path parameter)"
+            },
+            "id": {
+              "type": "integer",
+              "format": "int64",
+              "example": 10
+            },
+            "username": {
+              "type": "string",
+              "example": "theUser"
+            },
+            "firstName": {
+              "type": "string",
+              "example": "John"
+            },
+            "lastName": {
+              "type": "string",
+              "example": "James"
+            },
+            "email": {
+              "type": "string",
+              "example": "john@email.com"
+            },
+            "password": {
+              "type": "string",
+              "example": "12345"
+            },
+            "phone": {
+              "type": "string",
+              "example": "12345"
+            },
+            "userStatus": {
+              "type": "integer",
+              "description": "User Status",
+              "format": "int32",
+              "example": 1
+            }
+          },
+          "required": [
+            "username__path"
+          ]
+        }
+      },
+      {
+        "name": "mcp__petstore__uploadFile",
+        "description": "Upload image of the pet.",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "petId": {
+              "type": "integer",
+              "format": "int64",
+              "description": "ID of pet to update"
+            },
+            "additionalMetadata": {
+              "type": "string",
+              "description": "Additional Metadata"
+            },
+            "body": {
+              "type": "string",
+              "format": "binary"
+            }
+          },
+          "required": [
+            "petId"
+          ]
+        }
+      }
+    ],
+    "messages": []
+  }
+}

@@ -1,0 +1,210 @@
+[
+  {
+    "side": "before",
+    "number": 1,
+    "tool_calls": 4,
+    "failed_calls": 0,
+    "probing_calls": 2,
+    "calls": [
+      "findPetsByStatus",
+      "findPetsByTags",
+      "placeOrder",
+      "getPetById"
+    ],
+    "input_tokens": 28299,
+    "output_tokens": 667,
+    "cost_usd": 0.044746799999999996,
+    "turns": 5,
+    "pet_bought": true,
+    "pickup_scheduled": false,
+    "sold_pet_ordered": false,
+    "still_on_offer": true,
+    "final_answer": "I placed an order for **Rex**, a dog the store tags as \"friendly\", but the purchase doesn't look finished yet.\n\n- **Order:** 1 \u00d7 Rex (pet ID 1). Status is `placed` and `complete: false`.\n- **Not confirmed:** The store gave the order ID `0`, which may not be a real ID. When I checked Rex afterwards, the store still listed him as `available` rather than pending or sold.\n\n**Why Rex:** Only two dogs tagged \"friendly\" are available, Rex and **Bello**. You weren't around to choose, so I took the first one. Bello is also tagged as a puppy, so if you'd prefer him I can cancel Rex's order and order Bello instead."
+  },
+  {
+    "side": "before",
+    "number": 2,
+    "tool_calls": 2,
+    "failed_calls": 0,
+    "probing_calls": 1,
+    "calls": [
+      "findPetsByStatus",
+      "placeOrder"
+    ],
+    "input_tokens": 20162,
+    "output_tokens": 506,
+    "cost_usd": 0.036233600000000005,
+    "turns": 3,
+    "pet_bought": true,
+    "pickup_scheduled": false,
+    "sold_pet_ordered": false,
+    "still_on_offer": true,
+    "final_answer": "I placed an order for **Rex**, an available dog tagged \"friendly\" (pet id 1). The order status is \"placed,\" not yet complete.\n\nThere was one other friendly dog, **Bello** (id 3), who is also a puppy. I chose Rex because he came up first. If you'd rather have Bello, I can cancel this order and order him instead.\n\nOne thing looks off: the store gave the order an id of `0`, which may be a placeholder. Because of that, I can't confirm the order was actually saved or look it up later."
+  },
+  {
+    "side": "before",
+    "number": 3,
+    "tool_calls": 3,
+    "failed_calls": 0,
+    "probing_calls": 2,
+    "calls": [
+      "findPetsByStatus",
+      "findPetsByTags",
+      "placeOrder"
+    ],
+    "input_tokens": 20871,
+    "output_tokens": 611,
+    "cost_usd": 0.0410884,
+    "turns": 4,
+    "pet_bought": true,
+    "pickup_scheduled": false,
+    "sold_pet_ordered": false,
+    "still_on_offer": true,
+    "final_answer": "I placed an order for **Rex**, a friendly dog (pet #1).\n\n- **Order:** petId 1, quantity 1, status \"placed\", not yet complete\n- **Order ID:** the store returned `0`. That could be a placeholder rather than a real ID, so if you need to track the order later, check that it exists first.\n\nThere was one other friendly dog available: **Bello** (#3), who is a puppy. You didn't ask for a puppy, so I picked Rex. If you'd rather have Bello, I can cancel this order and place a new one."
+  },
+  {
+    "side": "before",
+    "number": 4,
+    "tool_calls": 2,
+    "failed_calls": 0,
+    "probing_calls": 1,
+    "calls": [
+      "findPetsByStatus",
+      "placeOrder"
+    ],
+    "input_tokens": 20176,
+    "output_tokens": 563,
+    "cost_usd": 0.037469999999999996,
+    "turns": 3,
+    "pet_bought": true,
+    "pickup_scheduled": false,
+    "sold_pet_ordered": false,
+    "still_on_offer": true,
+    "final_answer": "I placed an order for **Rex**, a dog tagged \"friendly\" (pet ID 1). The order's status is **placed**, not complete.\n\nI chose Rex because they were the first match. The other friendly dog available is **Bello** (pet ID 3), who is also a puppy. If you'd prefer Bello, I can cancel this order and order Bello instead.\n\nThe store returned an order ID of `0`, which may mean it didn't give the order a real ID. If you need to track or cancel it later, I can look it up, but that may not work with an ID of 0."
+  },
+  {
+    "side": "before",
+    "number": 5,
+    "tool_calls": 2,
+    "failed_calls": 0,
+    "probing_calls": 1,
+    "calls": [
+      "findPetsByStatus",
+      "placeOrder"
+    ],
+    "input_tokens": 20133,
+    "output_tokens": 501,
+    "cost_usd": 0.035971800000000005,
+    "turns": 3,
+    "pet_bought": true,
+    "pickup_scheduled": false,
+    "sold_pet_ordered": false,
+    "still_on_offer": true,
+    "final_answer": "I placed an order for Rex, a dog tagged \"friendly\" in the store.\n\n- **Order:** pet #1 (Rex), quantity 1\n- **Status:** `placed` and not yet complete, so it still needs to be approved and delivered.\n- **Order ID:** the store returned `0`. That number may not be a real ID, so it might not work for looking up or cancelling the order later.\n\nBello (#3) is another friendly dog that's still available, and he's a puppy. If you'd rather have him, I can cancel Rex's order and order Bello instead."
+  },
+  {
+    "side": "after",
+    "number": 1,
+    "tool_calls": 3,
+    "failed_calls": 0,
+    "probing_calls": 1,
+    "calls": [
+      "find_available_pets",
+      "buy_pet",
+      "schedule_pickup"
+    ],
+    "input_tokens": 19471,
+    "output_tokens": 640,
+    "cost_usd": 0.0437828,
+    "turns": 4,
+    "pet_bought": true,
+    "pickup_scheduled": true,
+    "sold_pet_ordered": false,
+    "still_on_offer": false,
+    "final_answer": "I bought you **Rex**, a friendly dog. Your purchase ID is `pur-94e0fe9b`.\n\nYou can pick Rex up at the shop on **Mon, Nov 2 at 10:00 AM**.\n\nI made two choices for you:\n- **The dog:** Two friendly dogs were available, Rex and Bello. Bello is also tagged as a puppy. I went with Rex because he was first on the list.\n- **The pickup time:** I took the earliest free slot. Other times on Nov 2 are open every hour from 11:00 AM to 3:00 PM, and I can move the pickup to any of them.\n\nYou can cancel for free until the pickup time. If you'd rather have Bello, I can cancel Rex and buy Bello instead."
+  },
+  {
+    "side": "after",
+    "number": 2,
+    "tool_calls": 3,
+    "failed_calls": 0,
+    "probing_calls": 1,
+    "calls": [
+      "find_available_pets",
+      "buy_pet",
+      "schedule_pickup"
+    ],
+    "input_tokens": 19348,
+    "output_tokens": 568,
+    "cost_usd": 0.04181119999999999,
+    "turns": 4,
+    "pet_bought": true,
+    "pickup_scheduled": true,
+    "sold_pet_ordered": false,
+    "still_on_offer": false,
+    "final_answer": "I bought you **Rex**, a dog listed as friendly. Your purchase ID is `pur-2a32510c`.\n\n- **Why Rex:** The shop had two friendly dogs, Rex and Bello. Bello is also tagged as a puppy. I couldn't ask which you wanted, so I took Rex because he was listed first.\n- **Pickup:** I booked the earliest slot, **Monday, Nov 2 at 10:00 AM**, at the shop. Other times that day run hourly until 3:00 PM if you'd like to move it.\n- **Cancelling:** It's free to cancel any time before the pickup slot.\n\nIf you'd like Bello instead, or a different pickup time, tell me and I'll change it."
+  },
+  {
+    "side": "after",
+    "number": 3,
+    "tool_calls": 3,
+    "failed_calls": 0,
+    "probing_calls": 1,
+    "calls": [
+      "find_available_pets",
+      "buy_pet",
+      "schedule_pickup"
+    ],
+    "input_tokens": 19334,
+    "output_tokens": 543,
+    "cost_usd": 0.0412304,
+    "turns": 4,
+    "pet_bought": true,
+    "pickup_scheduled": true,
+    "sold_pet_ordered": false,
+    "still_on_offer": false,
+    "final_answer": "I bought you Rex, a friendly dog. You can pick him up at the shop on **Monday, Nov 2 at 10:00 AM**.\n\nI couldn't check with you, so I made two choices myself:\n- **Which dog:** Two friendly dogs were available, Rex and Bello. Bello is also tagged as a puppy. I picked Rex because he came up first.\n- **Pickup time:** I took the earliest slot. Slots run every hour from 10 AM to 3 PM on Nov 2.\n\nI can move the pickup to another slot. I can also cancel for free any time before pickup, for example to get Bello instead. Purchase ID: `pur-631d2617`."
+  },
+  {
+    "side": "after",
+    "number": 4,
+    "tool_calls": 3,
+    "failed_calls": 0,
+    "probing_calls": 1,
+    "calls": [
+      "find_available_pets",
+      "buy_pet",
+      "schedule_pickup"
+    ],
+    "input_tokens": 19427,
+    "output_tokens": 576,
+    "cost_usd": 0.042158600000000004,
+    "turns": 4,
+    "pet_bought": true,
+    "pickup_scheduled": true,
+    "sold_pet_ordered": false,
+    "still_on_offer": false,
+    "final_answer": "I bought you **Rex**, a friendly dog. Your purchase ID is `pur-e80f0999`.\n\n- **Why Rex:** The shop had two friendly dogs, Rex and Bello. Bello is a puppy, and you didn't ask for one, so I picked Rex.\n- **Pickup:** I booked the earliest slot, **Mon, Nov 2 at 10:00 AM** at the shop. Other times that day run hourly until 3:00 PM, and I can move the pickup to any of them.\n- **Cancelling:** It's free to cancel any time before the pickup time. If you'd rather have Bello, I can cancel Rex and buy Bello instead."
+  },
+  {
+    "side": "after",
+    "number": 5,
+    "tool_calls": 3,
+    "failed_calls": 0,
+    "probing_calls": 1,
+    "calls": [
+      "find_available_pets",
+      "buy_pet",
+      "schedule_pickup"
+    ],
+    "input_tokens": 19304,
+    "output_tokens": 548,
+    "cost_usd": 0.041184,
+    "turns": 4,
+    "pet_bought": true,
+    "pickup_scheduled": true,
+    "sold_pet_ordered": false,
+    "still_on_offer": false,
+    "final_answer": "I bought you **Rex**, a dog listed as friendly. Your purchase ID is `pur-f5bc376e`.\n\n**Pickup:** Monday, Nov 2, 10:00 AM, at the shop.\n\nTwo choices I made for you, since I couldn't ask:\n- **The dog:** The shop had two friendly dogs. I went with Rex, the first one listed. The other is **Bello**, a friendly puppy.\n- **The pickup time:** I booked the earliest slot. Other times on Nov 2 are open every hour from 11:00 AM to 3:00 PM.\n\nYou can change the pickup time, or cancel for free any time before the pickup. If you'd rather have Bello, I can cancel Rex and buy Bello instead."
+  }
+]

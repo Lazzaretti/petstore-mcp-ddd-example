@@ -1,0 +1,28 @@
+# kagent 0.10.4 for the screenshot: the controller and the UI only. The sample agents and tools
+# are off (buyers never load them, and they need an LLM key); listing tools needs no key.
+kmcp:
+  enabled: false
+kagent-tools:
+  enabled: false
+grafana-mcp:
+  enabled: false
+k8s-agent:
+  enabled: false
+kgateway-agent:
+  enabled: false
+istio-agent:
+  enabled: false
+promql-agent:
+  enabled: false
+observability-agent:
+  enabled: false
+argo-rollouts-agent:
+  enabled: false
+helm-agent:
+  enabled: false
+cilium-policy-agent:
+  enabled: false
+cilium-manager-agent:
+  enabled: false
+cilium-debug-agent:
+  enabled: false

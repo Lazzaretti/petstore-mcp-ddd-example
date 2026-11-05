@@ -1,0 +1,15 @@
+# Spikes (1 Nov 2026)
+
+Throwaway experiments from the research before building the demo. Not demo code; kept for the working snippets and the real wire messages.
+
+**Don't copy as-is.** Where a spike and the demo code ([petstore/](../petstore/)) differ, the demo code wins:
+- The Keycloak spike (`keycloak/petstore_auth.py`) has `my_purchases` on sales and `schedule_pickup(pet_id)` on handover: the reverse of the decision (`schedule_pickup(purchase_id, pickup_slot)` on sales, `my_purchases` on handover). Its lifespan is hand-written: use `combine_lifespans`.
+- The kagent `agent.yaml` lacks `schedule_pickup`.
+- The spikes mix `mcp.types` and `mcp_types` imports and annotation spellings: use `ToolAnnotations(read_only_hint=...)` as in `petstore/`.
+
+- `elicitation/`: `buy_pet` asking for a pickup slot (titled `oneOf`), both protocol eras (2026-07-28 `input_required` and 2025-11-25 `ctx.elicit`), the fallback without elicitation; `wire/` has the captured messages from the FastMCP client and from Claude Code 2.1.316; `claude-code/` has the config and an `Elicitation` hook that picks the first slot (for headless runs). Pretty-print: `python showwire.py wire/<file>`. Findings (the demo doesn't elicit; this is for the "Elicitation: when?" slide):
+  - Works live in Claude Code 2.1.316 in a terminal, both protocol eras: the slots (titled `oneOf`) show as a picker; accept/decline/cancel reach the server. Not: `claude -p` (auto-cancels unless an `Elicitation` hook answers), the VS Code extension, Claude Desktop, Cursor. kagent 0.10.4 doesn't do MCP elicitation.
+  - fastmcp 4.1.4: branch on `ctx.request_context.protocol_version`. On 2026-07-28 return an `InputRequiredResult` (`inputRequests["pickup"]` = `elicitation/create`, form mode, field `pickup_slot` with a titled `oneOf`) and read `ctx.input_responses["pickup"]` on the retry; on 2025-11-25 use `ctx.elicit(message, response_type={value: {"title": ...}})` (field name `value`). `ctx.elicit` raises on 2026-07-28 connections; `InputRequiredResult` fails on 2025-11-25.
+  - Decline/cancel results must say what happened and list the slots plus the `pickup_slot` parameter; otherwise the model doesn't know the customer said no. Clients without elicitation get a domain error listing the slots.
+- `kagent-kmcp/`: three FastMCP servers mounted in one Starlette app (`exp/app.py`, `combine_lifespans`), a client for both eras, NATS pub/sub (`exp/nats_demo.py`), a Dockerfile and single-context image for kmcp (`img/`), and the manifests tested on kind with kagent 0.10.4 (`k8s/`: `RemoteMCPServer` for the three servers, a kmcp `MCPServer`, an `Agent`).
+- `keycloak/`: the tested Keycloak 26.8.1 setup: `petstore-realm.json` (realm import; local demo passwords only), `petstore_auth.py` (three servers with `RemoteAuthProvider` + `JWTVerifier`, customer from `TokenClaim`), `oauthtest.py` (FastMCP client with OAuth + token store), `flow.py` (scripted login used in testing), `apply.py` (admin API helper). Run Keycloak with `scripts/keycloak.sh start` (`start-dev --features=cimd,resource-indicators --import-realm`, this realm file).

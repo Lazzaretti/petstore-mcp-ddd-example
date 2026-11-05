@@ -1,0 +1,11 @@
+{
+  "enabledMcpjsonServers": ["petstore-discovery", "petstore-sales", "petstore-handover"],
+  "permissions": {
+    "allow": ["mcp__petstore-discovery__find_available_pets", "mcp__petstore-handover__my_purchases"],
+    "ask": ["mcp__petstore-sales__reserve_pet", "mcp__petstore-sales__buy_pet",
+            "mcp__petstore-sales__schedule_pickup", "mcp__petstore-sales__cancel_purchase"]
+  },
+  "claudeMdExcludes": ["**/CLAUDE.md"],
+  "spinnerTipsEnabled": false,
+  "tui": "fullscreen"
+}

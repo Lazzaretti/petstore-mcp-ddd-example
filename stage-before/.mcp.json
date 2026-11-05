@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "petstore": {
+      "command": "uv",
+      "args": ["run", "--directory", "..", "python", "petstore_before.py"],
+      "env": {"PETSTORE_API_URL": "http://localhost:8081/api/v3"}
+    }
+  }
+}

@@ -1,0 +1,59 @@
+// Dev container for the Petstore MCP demo: Python + uv, Node, Docker-in-Docker, kind, kubectl, helm.
+// post-create.sh installs the pinned CLIs: Claude Code 2.1.316, kagent v0.10.4, kmcp v0.4.0.
+// Claude Code's config lives in a named volume (never the host's ~/.claude).
+{
+  "name": "example-petstore",
+  "image": "mcr.microsoft.com/devcontainers/python:3-3.13-bookworm",
+
+  "features": {
+    "ghcr.io/devcontainers/features/node:2": {
+      "version": "lts"
+    },
+    "ghcr.io/devcontainers-extra/features/uv:1": {},
+    "ghcr.io/devcontainers/features/docker-in-docker:4": {},
+    "ghcr.io/devcontainers-extra/features/kind:1": {},
+    "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {
+      "minikube": "none"
+    }
+  },
+
+  "remoteUser": "vscode",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/example-petstore,type=bind",
+  "workspaceFolder": "/workspaces/example-petstore",
+
+  // Claude Code: config, credentials and ~/.claude.json persist across rebuilds in this volume.
+  "mounts": [
+    "source=claude-code-config-${devcontainerId},target=/home/vscode/.claude,type=volume"
+  ],
+  "containerEnv": {
+    "CLAUDE_CONFIG_DIR": "/home/vscode/.claude",
+    // Claude Code is pinned in post-create.sh; keep it from updating itself.
+    "DISABLE_AUTOUPDATER": "1",
+    "UV_LINK_MODE": "copy"
+  },
+
+  // A new named volume is owned by root; hand it to the container user before anything uses it.
+  "onCreateCommand": "sudo chown -R vscode:vscode /home/vscode/.claude",
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+
+  // 8000 and 8080 must keep their numbers on the host: issuer and audience are http://localhost:8000|8080.
+  // A busy port fails loudly instead of being remapped.
+  "forwardPorts": [8000, 8080, 8082],
+  "portsAttributes": {
+    "8000": { "label": "MCP servers (Streamable HTTP)", "onAutoForward": "notify", "requireLocalPort": true },
+    "8080": { "label": "Keycloak", "onAutoForward": "notify", "requireLocalPort": true },
+    "8082": { "label": "kagent UI (kagent dashboard)", "onAutoForward": "notify" }
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "anthropic.claude-code"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "${containerWorkspaceFolder}/.venv/bin/python"
+      }
+    }
+  }
+}

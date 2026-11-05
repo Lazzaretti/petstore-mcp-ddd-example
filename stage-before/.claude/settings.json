@@ -1,0 +1,15 @@
+{
+  "enabledMcpjsonServers": [
+    "petstore"
+  ],
+  "permissions": {
+    "allow": [
+      "mcp__petstore"
+    ]
+  },
+  "claudeMdExcludes": [
+    "**/CLAUDE.md"
+  ],
+  "spinnerTipsEnabled": false,
+  "tui": "fullscreen"
+}

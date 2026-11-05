@@ -1,0 +1,1 @@
+{"hooks": {"Elicitation": [{"matcher": "petsales", "hooks": [{"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR\"/spikes/elicitation/claude-code/pick_first_slot_hook.py"}]}]}}

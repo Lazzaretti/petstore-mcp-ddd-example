@@ -1,0 +1,31 @@
+# One RemoteMCPServer per bounded context. ${APP_URL} is filled in by scripts/kagent-kind.sh:
+# the kind network's gateway (this container) on port 8000, where the app runs with AUTH=off.
+apiVersion: kagent.dev/v1alpha2
+kind: RemoteMCPServer
+metadata:
+  name: petstore-discovery
+  namespace: kagent
+spec:
+  description: "Pet Discovery: find the pets the shop has on offer"
+  url: ${APP_URL}/discovery/mcp
+  protocol: STREAMABLE_HTTP
+---
+apiVersion: kagent.dev/v1alpha2
+kind: RemoteMCPServer
+metadata:
+  name: petstore-sales
+  namespace: kagent
+spec:
+  description: "Pet Sales: reserve and buy pets, schedule or cancel the pickup"
+  url: ${APP_URL}/sales/mcp
+  protocol: STREAMABLE_HTTP
+---
+apiVersion: kagent.dev/v1alpha2
+kind: RemoteMCPServer
+metadata:
+  name: petstore-handover
+  namespace: kagent
+spec:
+  description: "Pet Handover: the customer's purchases and their pickup slots"
+  url: ${APP_URL}/handover/mcp
+  protocol: STREAMABLE_HTTP

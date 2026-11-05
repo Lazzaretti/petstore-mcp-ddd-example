@@ -1,0 +1,29 @@
+apiVersion: kagent.dev/v1alpha2
+kind: RemoteMCPServer
+metadata:
+  name: petstore-discovery
+  namespace: kagent
+spec:
+  description: "Discovery context: find pets that are available"
+  url: http://host.docker.internal:8799/discovery/mcp
+  protocol: STREAMABLE_HTTP
+---
+apiVersion: kagent.dev/v1alpha2
+kind: RemoteMCPServer
+metadata:
+  name: petstore-sales
+  namespace: kagent
+spec:
+  description: "Sales context: reserve, buy, cancel"
+  url: http://host.docker.internal:8799/sales/mcp
+  protocol: STREAMABLE_HTTP
+---
+apiVersion: kagent.dev/v1alpha2
+kind: RemoteMCPServer
+metadata:
+  name: petstore-handover
+  namespace: kagent
+spec:
+  description: "Handover context: my purchases and pickups"
+  url: http://host.docker.internal:8799/handover/mcp
+  protocol: STREAMABLE_HTTP

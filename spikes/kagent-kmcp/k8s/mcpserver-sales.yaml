@@ -1,0 +1,16 @@
+apiVersion: kagent.dev/v1alpha1
+kind: MCPServer
+metadata:
+  name: petstore-sales-k
+  namespace: kagent
+spec:
+  transportType: http
+  httpTransport:
+    targetPort: 8000      # required by the controller (must be non-zero)
+    path: /mcp            # informational: kagent 0.10.x always calls http://<name>.<ns>:<port>/mcp
+  deployment:
+    image: petstore-sales:dev
+    imagePullPolicy: IfNotPresent
+    port: 8000            # becomes Service port AND targetPort; the container must listen here
+    env:
+      NATS_URL: nats://nats.nats.svc.cluster.local:4222

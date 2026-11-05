@@ -1,0 +1,159 @@
+{
+  "note": "Reduced for publication: from Claude Code's first model request, only the MCP tools and the MCP server instructions as they were sent. System prompt, user context and headers removed.",
+  "body": {
+    "model": "claude-haiku-5-5",
+    "tools": [
+      {
+        "name": "mcp__petstore-discovery__find_available_pets",
+        "description": "Find pets on offer, optionally by species and tag.",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "species": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "e.g. dog, cat"
+            },
+            "tag": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "e.g. friendly, puppy, indoor"
+            }
+          }
+        }
+      },
+      {
+        "name": "mcp__petstore-handover__my_purchases",
+        "description": "The customer's active purchases with their pickup slots.",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {}
+        }
+      },
+      {
+        "name": "mcp__petstore-sales__buy_pet",
+        "description": "Buy a pet for the customer. Without pickup_slot, the result lists the free pickup slots.",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "pet_id": {
+              "description": "From find_available_pets.",
+              "type": "integer"
+            },
+            "pickup_slot": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Only if the customer already chose a slot, e.g. 2026-11-10T10:00."
+            },
+            "reservation_id": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Optional check, from reserve_pet."
+            }
+          },
+          "required": [
+            "pet_id"
+          ]
+        }
+      },
+      {
+        "name": "mcp__petstore-sales__cancel_purchase",
+        "description": "Cancel a purchase: free until the pickup slot. The pet goes back on offer.",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "purchase_id": {
+              "description": "From buy_pet or my_purchases.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "purchase_id"
+          ]
+        }
+      },
+      {
+        "name": "mcp__petstore-sales__reserve_pet",
+        "description": "Hold a pet for the customer for 24 hours while they decide. Optional: buy_pet works without a reservation.",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "pet_id": {
+              "description": "From find_available_pets.",
+              "type": "integer"
+            }
+          },
+          "required": [
+            "pet_id"
+          ]
+        }
+      },
+      {
+        "name": "mcp__petstore-sales__schedule_pickup",
+        "description": "Schedule or change when the customer picks up a purchased pet at the shop.",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "purchase_id": {
+              "description": "From buy_pet or my_purchases.",
+              "type": "string"
+            },
+            "pickup_slot": {
+              "description": "A slot value such as 2026-11-10T10:00, from a result.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "purchase_id",
+            "pickup_slot"
+          ]
+        }
+      }
+    ],
+    "messages": [
+      {
+        "role": "system",
+        "content": [
+          {
+            "type": "text",
+            "text": "# MCP Server Instructions\n\nThe following MCP servers have provided instructions for how to use their tools and resources:\n\n## petstore-discovery\nPet Discovery: find the pets the shop has on offer.\n\n## petstore-handover\nPet Handover: the signed-in customer's purchases and when to pick them up.\n\n## petstore-sales\nPet Sales: reserve and buy pets for the signed-in customer and schedule or cancel the pickup."
+          }
+        ]
+      }
+    ]
+  }
+}

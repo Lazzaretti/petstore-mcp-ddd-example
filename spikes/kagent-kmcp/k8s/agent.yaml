@@ -1,0 +1,26 @@
+apiVersion: kagent.dev/v1alpha2
+kind: Agent
+metadata:
+  name: petstore-assistant
+  namespace: kagent
+spec:
+  description: Helps customers find, buy and pick up pets.
+  type: Declarative
+  declarative:
+    modelConfig: default-model-config
+    systemMessage: |-
+      You help customers of the pet store. Use discovery tools to find pets,
+      sales tools to reserve/buy/cancel, handover tools for pickups.
+    tools:
+    - type: McpServer
+      mcpServer: {apiGroup: kagent.dev, kind: RemoteMCPServer, name: petstore-discovery, toolNames: [find_available_pets]}
+    - type: McpServer
+      mcpServer:
+        apiGroup: kagent.dev
+        kind: RemoteMCPServer
+        name: petstore-sales
+        toolNames: [reserve_pet, buy_pet, cancel_purchase]
+        requireApproval: [cancel_purchase]
+        allowedHeaders: [Authorization]
+    - type: McpServer
+      mcpServer: {apiGroup: kagent.dev, kind: RemoteMCPServer, name: petstore-handover, toolNames: [my_purchases]}

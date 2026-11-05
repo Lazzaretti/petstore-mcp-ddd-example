@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "petstore-discovery": {"type": "http", "url": "http://localhost:8010/discovery/mcp"},
+    "petstore-sales": {"type": "http", "url": "http://localhost:8010/sales/mcp"},
+    "petstore-handover": {"type": "http", "url": "http://localhost:8010/handover/mcp"}
+  }
+}
